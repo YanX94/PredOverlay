@@ -15,11 +15,15 @@ function createWindow() {
     skipTaskbar: false, // Keep in taskbar to avoid losing access
     hasShadow: false,
     resizable: false,
+    icon: path.join(__dirname, 'assets', 'ico.png'), // 👈 Icône personnalisée ici
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
     }
   });
+
+
+  win.webContents.openDevTools(); // 👈 Ouvre DevTools automatiquement
 
   // 🛠️ Renforce la priorité de la fenêtre (niveau screen-saver)
   win.setAlwaysOnTop(true, 'screen-saver');
