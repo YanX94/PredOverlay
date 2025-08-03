@@ -125,9 +125,6 @@ td {
   color: white;
 }
 
-
-
-
 #hero-modal {
   display: none;
   position: absolute;
@@ -137,16 +134,13 @@ td {
   padding: 10px;
   max-width: 600px;
   max-height: 400px;
-  overflow-y: hidden; /* <-- cache la barre de défilement verticale */
-  z-index: 999;
-    overflow-y: auto;
+  overflow-y: auto;
   scrollbar-width: none; /* Firefox */
+  z-index: 999;
 }
-
 #hero-modal::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
-
   </style>
 </head>
 <body>
@@ -180,9 +174,7 @@ td {
   <button id="save-config-btn" style="margin-left:20px;">Save</button>
 </div>
 <div id="hero-modal">
-
   <button id="close-hero-modal" style="position:absolute;top:8px;right:12px;font-size:22px;background:none;border:none;color:#fff;cursor:pointer;z-index:1001;">✖</button>
-
 </div>
 
 <div class="skill-order">
@@ -210,7 +202,6 @@ td {
   });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
   const slots = document.querySelectorAll('.item-slot');
   const modal = document.getElementById('item-modal');
@@ -222,18 +213,23 @@ td {
 
       if (itemsCache.length === 0) {
         try {
-          const res = await axios.get("https://api.omeda.city/items");
-          itemsCache = res.data;
+          const res = await fetch("assets/items.json");
+          itemsCache = await res.json();
         } catch (err) {
           console.error("Erreur lors de la récupération des items :", err);
           return;
         }
       }
 
-      modal.innerHTML = itemsCache.map(item =>
-        `<img src="${item.image}" data-id="${item.id}" class="item-choice" title="${item.name}" style="width: 64px; height: 64px; margin: 4px;">`
-      ).join('');
+      modal.innerHTML = `<button id="close-item-modal" style="position:absolute;top:8px;right:12px;font-size:22px;background:none;border:none;color:#fff;cursor:pointer;z-index:1001;">✖</button>` +
+        itemsCache.map(item =>
+          `<img src="${item.image}" data-id="${item.id}" class="item-choice" title="${item.name}" style="width: 64px; height: 64px; margin: 4px;">`
+        ).join('');
       modal.style.display = 'block';
+
+      document.getElementById('close-item-modal').onclick = () => {
+        modal.style.display = 'none';
+      };
 
       document.querySelectorAll('.item-choice').forEach(img => {
         img.addEventListener('click', () => {
@@ -245,11 +241,6 @@ td {
     });
   });
 </script>
-
-
-
-
-
 
 <script>
   const skills = ['mouse-right', 'q', 'e', 'r'];
@@ -323,10 +314,6 @@ td {
   createTable();
 </script>
 
-
-
-
-
 <script>
 let heroesCache = [];
 let selectedHero = null;
@@ -379,4 +366,3 @@ document.addEventListener('click', (e) => {
   }
 });
 </script>
-</body>
