@@ -124,6 +124,29 @@ td {
   background-color: #a5a5a579;
   color: white;
 }
+
+
+
+
+#hero-modal {
+  display: none;
+  position: absolute;
+  top: 120px;
+  left: 120px;
+  background: #111;
+  padding: 10px;
+  max-width: 600px;
+  max-height: 400px;
+  overflow-y: hidden; /* <-- cache la barre de défilement verticale */
+  z-index: 999;
+    overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+#hero-modal::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
   </style>
 </head>
 <body>
@@ -150,6 +173,17 @@ td {
 </div>
 
 <div id="item-modal" style="display:none;"></div>
+
+<div id="hero-selector" style="margin-left:50px; margin-top:20px;">
+  <button id="choose-hero-btn">Choose a hero</button>
+  <span id="selected-hero" style="margin-left:10px; font-weight:bold;"></span>
+  <button id="save-config-btn" style="margin-left:20px;">Save</button>
+</div>
+<div id="hero-modal">
+
+  <button id="close-hero-modal" style="position:absolute;top:8px;right:12px;font-size:22px;background:none;border:none;color:#fff;cursor:pointer;z-index:1001;">✖</button>
+
+</div>
 
 <div class="skill-order">
   <table id="skill-table">
@@ -211,6 +245,11 @@ td {
     });
   });
 </script>
+
+
+
+
+
 
 <script>
   const skills = ['mouse-right', 'q', 'e', 'r'];
@@ -283,5 +322,61 @@ td {
 
   createTable();
 </script>
+
+
+
+
+
+<script>
+let heroesCache = [];
+let selectedHero = null;
+
+const heroBtn = document.getElementById('choose-hero-btn');
+const heroModal = document.getElementById('hero-modal');
+const selectedHeroSpan = document.getElementById('selected-hero');
+
+// Charge la liste locale des héros
+async function loadHeroes() {
+  if (heroesCache.length === 0) {
+    try {
+      const res = await fetch("assets/heroes.json");
+      heroesCache = await res.json();
+    } catch (err) {
+      console.error("Erreur lors du chargement des héros :", err);
+      heroesCache = []; // fallback vide
+    }
+  }
+}
+
+// Ouvre le modal de sélection de héros
+heroBtn.addEventListener('click', async () => {
+  await loadHeroes();
+
+  heroModal.innerHTML = `<button id="close-hero-modal" style="position:absolute;top:8px;right:12px;font-size:22px;background:none;border:none;color:#fff;cursor:pointer;z-index:1001;">✖</button>` +
+    heroesCache.map(hero =>
+      `<img src="${hero.image}" data-id="${hero.id}" title="${hero.display_name || hero.name}" class="hero-choice" style="width:64px;height:64px;margin:6px;border-radius:8px;cursor:pointer;border:2px solid #222;">`
+    ).join('');
+  heroModal.style.display = 'block';
+
+  document.getElementById('close-hero-modal').onclick = () => {
+    heroModal.style.display = 'none';
+  };
+
+  document.querySelectorAll('.hero-choice').forEach(img => {
+    img.addEventListener('click', () => {
+      selectedHero = heroesCache.find(h => h.id == img.dataset.id);
+      selectedHeroSpan.textContent = selectedHero.display_name || selectedHero.name;
+      selectedHeroSpan.style.color = "#0ff";
+      heroModal.style.display = 'none';
+    });
+  });
+});
+
+// Fermer le modal si on clique en dehors
+document.addEventListener('click', (e) => {
+  if (heroModal.style.display === 'block' && !heroModal.contains(e.target) && e.target !== heroBtn) {
+    heroModal.style.display = 'none';
+  }
+});
+</script>
 </body>
-</html>
