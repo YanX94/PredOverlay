@@ -1,3 +1,8 @@
+/* ==========================================
+   FONT IMPORTS & DECLARATIONS
+   Custom fonts for branding and UI
+   ========================================== */
+
 @font-face {
   font-family: "Storica";
   src: url("../fonts/althawra\ fikra\ Bold.ttf") format("truetype");
@@ -12,15 +17,34 @@
   font-style: normal;
 }
 
+/* ==========================================
+   GLOBAL RESET & BASE STYLES
+   Foundation styles for the overlay
+   ========================================== */
+
 html,
 body {
   margin: 0;
   padding: 0;
-
   font-family: "WeissenhofGrotesk", "Storica", Arial, sans-serif;
   user-select: none;
   overflow: hidden;
 }
+
+/* ==========================================
+   OVERLAY WRAPPER & SCALING SYSTEM
+   Main container with transform capabilities
+   ========================================== */
+
+#overlay-wrapper {
+  transform-origin: top left;
+  transition: transform 0.2s;
+}
+
+/* ==========================================
+   HEADER & TITLE BAR STYLES
+   Top section with branding and status
+   ========================================== */
 
 #overlay-box {
   position: absolute;
@@ -64,6 +88,11 @@ body {
   color: #e2e2e2;
 }
 
+/* ==========================================
+   STATUS INDICATOR SYSTEM
+   Active/Inactive state display
+   ========================================== */
+
 #status {
   padding: 2px 8px;
   border-radius: 8px;
@@ -72,10 +101,6 @@ body {
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 8px #0004;
-}
-
-.buttons-container button i {
-  pointer-events: none;
 }
 
 .active {
@@ -94,6 +119,121 @@ body {
   margin-bottom: 5px !important;
 }
 
+/* ==========================================
+   BUTTON SYSTEM & CONTROLS
+   Unified button styling and container
+   ========================================== */
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  float: right;
+  margin-top: -5px;
+}
+
+.buttons-container button i {
+  pointer-events: none;
+}
+
+button {
+  background: linear-gradient(90deg, #232323 60%, #23232300 100%);
+  color: #e2e2e2;
+  border: 1px solid #393939;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 8px;
+  box-shadow: 0 2px 8px #0004;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+button:hover {
+  border-color: #2ecc40;
+  color: #2ecc40;
+}
+
+/* ==========================================
+   SPECIALIZED BUTTON VARIANTS
+   Individual button styles with unique colors
+   ========================================== */
+
+#choose-hero-btn {
+  border-radius: 8px;
+  background: #232323;
+  color: #e4c42a;
+  border: 1px solid #393939;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0004;
+  width: 36px;
+  height: 36px;
+}
+
+#choose-hero-btn:hover {
+  border-color: #e4c42a !important;
+  box-shadow: 0 2px 16px #927e1a;
+  color: #e4c42a;
+}
+
+#save-config-btn {
+  border-radius: 8px;
+  background: #232323;
+  color: #2ecc40;
+  border: 1px solid #393939;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0004;
+  width: 36px;
+  height: 36px;
+}
+
+#save-config-btn:hover {
+  border-color: #2ecc40 !important;
+  box-shadow: 0 2px 16px #2ecc40;
+  color: #2ecc40;
+}
+
+#clear-config-btn {
+  border-radius: 8px;
+  background: #232323;
+  color: #ff3c3c;
+  border: 1px solid #393939;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0004;
+  width: 36px;
+  height: 36px;
+}
+
+#clear-config-btn:hover {
+  border-color: #ff3c3c !important;
+  box-shadow: 0 2px 16px #ff3c3c;
+  color: #ff3c3c;
+}
+
+#size-btn {
+  border-radius: 8px;
+  background: #232323;
+  color: #a72ecc;
+  border: 1px solid #393939;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0004;
+  width: 36px;
+  height: 36px;
+}
+
+#size-btn:hover {
+  border-color: #a72ecc !important;
+  box-shadow: 0 2px 16px #a72ecc;
+  color: #a72ecc;
+}
+
+/* ==========================================
+   ITEM INVENTORY SYSTEM
+   Item slots and hero preview display
+   ========================================== */
+
 #item-slots {
   padding-top: 97px;
   display: flex;
@@ -106,7 +246,6 @@ body {
   background: linear-gradient(135deg, #232323 70%, #23232300 100%);
   border: 2px solid #393939;
   border-radius: 12px;
-  
   cursor: pointer;
   transition: border-color 0.2s;
   display: flex;
@@ -118,9 +257,38 @@ body {
   border-color: #2ecc40;
 }
 
-#item-modal::-webkit-scrollbar {
-  display: none;
+#selected-hero-preview {
+  width: 68px;
+  height: 68px;
+  margin-left: auto;
+  border-radius: 12px;
+  background: #232323;
+  box-shadow: 0 2px 12px #0006;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #393939;
+  padding: 0 !important;
 }
+
+#selected-hero-preview:hover {
+  border-color: #2ecc40 !important;
+  cursor: pointer;
+}
+
+#selected-hero-preview img {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  margin: 0 !important;
+  display: block !important;
+  pointer-events: none;
+}
+
+/* ==========================================
+   SKILL ORDER TABLE SYSTEM
+   Interactive skill leveling interface
+   ========================================== */
 
 .skill-order {
   background: rgba(24, 26, 27, 0.92);
@@ -170,10 +338,15 @@ td:hover {
   font-weight: lighter;
 }
 
+/* ==========================================
+   MODAL DIALOG SYSTEM
+   Hero and item selection modals
+   ========================================== */
+
 #item-modal {
   display: none;
   position: absolute;
-  top:0px;
+  top: 0px;
   background: rgba(24, 26, 27, 0.98);
   padding: 8px;
   max-height: 420px;
@@ -185,12 +358,10 @@ td:hover {
   margin-top: 7px;
 }
 
-
 #hero-modal {
   display: none;
   position: absolute;
-  top:0px;
-
+  top: 0px;
   background: rgba(24, 26, 27, 0.98);
   padding: 8px;
   min-height: 405px;
@@ -199,40 +370,24 @@ td:hover {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
   border: 1px solid #232323;
   z-index: 999;
-    margin-top: 7px;
+  margin-top: 7px;
 }
 
 #hero-modal,
 #item-modal {
-  position: relative; /* <-- Ajoute cette ligne */
-  /* ...le reste de tes styles... */
+  position: relative;
 }
 
+/* Hide scrollbars in modals */
+#item-modal::-webkit-scrollbar,
 #hero-modal::-webkit-scrollbar {
   display: none;
 }
 
-button,
-.hero-choice,
-.item-choice {
-  transition: box-shadow 0.2s, border-color 0.2s;
-}
-
-button {
-  background: linear-gradient(90deg, #232323 60%, #23232300 100%);
-  color: #e2e2e2;
-  border: 1px solid #393939;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-right: 8px;
-  box-shadow: 0 2px 8px #0004;
-}
-
-button:hover {
-  border-color: #2ecc40;
-  color: #2ecc40;
-}
+/* ==========================================
+   MODAL CHOICE ELEMENTS
+   Hero and item selection grids
+   ========================================== */
 
 .hero-choice,
 .item-choice {
@@ -244,6 +399,7 @@ button:hover {
   height: 64px;
   background: #232323;
   cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
 
 .hero-choice:hover,
@@ -251,6 +407,11 @@ button:hover {
   border-color: #2ecc40 !important;
   box-shadow: 0 2px 16px #2ecc4066;
 }
+
+/* ==========================================
+   MODAL CLOSE BUTTONS
+   X buttons for closing modals
+   ========================================== */
 
 #close-hero-modal,
 #close-item-modal {
@@ -271,131 +432,22 @@ button:hover {
   box-shadow: 0 2px 12px #0008;
   float: right;
 }
-#close-hero-modal:hover {
-  background: #ff3c3c;
-  color: #fff;
-}
 
-
-
+#close-hero-modal:hover,
 #close-item-modal:hover {
   background: #ff3c3c;
   color: #fff;
 }
 
-#choose-hero-btn {
-  border-radius: 8px;
-  background: #232323;
-  color: #e4c42a;
-  border: 1px solid #393939;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px #0004;
-  width: 36px;
-  height: 36px;
-}
-
-#choose-hero-btn:hover {
-  border-color: #e4c42a !important;
-  box-shadow: 0 2px 16px #927e1a;
-  color: #e4c42a;
-}
-
-#save-config-btn {
-  border-radius: 8px;
-  background: #232323;
-  color: #2ecc40;
-  border: 1px solid #393939;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px #0004;
-    width: 36px;
-  height: 36px;
-}
-
-#save-config-btn:hover {
-  border-color: #2ecc40 !important;
-  box-shadow: 0 2px 16px #2ecc40;
-  color: #2ecc40;
-}
-
-#clear-config-btn {
-  border-radius: 8px;
-  background: #232323;
-  color: #ff3c3c;
-  border: 1px solid #393939;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px #0004;
-    width: 36px;
-  height: 36px;
-}
-
-#clear-config-btn:hover {
-  border-color: #ff3c3c !important;
-  box-shadow: 0 2px 16px #ff3c3c;
-  color: #ff3c3c;
-}
-
-#size-btn {
-  border-radius: 8px;
-  background: #232323;
-  color: #e2e2e2;
-  border: 1px solid #393939;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px #0004;
-    width: 36px;
-  height: 36px;
-  color: #a72ecc;
-}
-
-#size-btn:hover {
-  border-color: #a72ecc !important;
-  box-shadow: 0 2px 16px #a72ecc;
-  color: #a72ecc;
-}
-
-.buttons-container {
-  display: flex;
-  flex-direction: row;
-  float: right;
-  margin-top: -5px;
-}
-
-#selected-hero-preview {
-  width: 68px;
-  height: 68px;
-  margin-left: auto;
-  border-radius: 12px;
-  background: #232323;
-  box-shadow: 0 2px 12px #0006;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #393939;
-  padding: 0 !important;
-
-}
-
-#selected-hero-preview:hover {
-  border-color: #2ecc40 !important;
-  cursor: pointer;
-}
+/* ==========================================
+   LOCKED STATE OVERRIDES
+   Disabled interactions when overlay is locked
+   ========================================== */
 
 #selected-hero-preview.locked:hover {
   border-color: #393939 !important;
   cursor: default !important;
   box-shadow: none !important;
-}
-
-#selected-hero-preview img {
-  width: 64px;
-  height: 64px;
-  border-radius: 8px;
-  margin: 0 !important;
-  display: block !important;
-  pointer-events: none;
 }
 
 .item-slot.locked:hover,
@@ -409,9 +461,4 @@ td.locked:hover {
   background: rgba(32, 34, 36, 0.7) !important;
   color: #e2e2e2 !important;
   cursor: default !important;
-}
-
-#overlay-wrapper {
-  transform-origin: top left;
-  transition: transform 0.2s;
 }

@@ -9,6 +9,11 @@ const sounds = {
   right_click: new Audio("assets/sounds/right-click.mp3"),
 };
 
+// Set volume to 60% for all sounds
+Object.values(sounds).forEach(audio => {
+  audio.volume = 0.6; // 60% volume (0.0 = 0%, 1.0 = 100%)
+});
+
 // Utility to play a sound (restart if already playing)
 function playSound(name) {
   const snd = sounds[name];
