@@ -1,7 +1,7 @@
 # PredOverlay
 
 <div align="center">
-  <img src="assets/images/prewview.png" alt="preview" width="100%"/>
+  <img src="assets/images/preview.png" alt="preview" width="100%"/>
   
   **A Modern Game Overlay Tool for Strategic Planning**
   
