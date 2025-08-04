@@ -5,9 +5,9 @@
   
   **A Modern Game Overlay Tool for Strategic Planning**
   
-  [![Version](https://img.shields.io/badge/version-0.86-blue.svg)](https://github.com/your-repo/predoverlay)
+  [![Version](https://img.shields.io/badge/version-0.87-blue.svg)](https://github.com/your-repo/predoverlay)
   [![Electron](https://img.shields.io/badge/electron-latest-brightgreen.svg)](https://electronjs.org/)
-  [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+  [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 </div>
 
 ---
@@ -25,6 +25,7 @@
 - **🎵 Audio Feedback**: Immersive sound effects for all interactions
 - **⚙️ Persistent Storage**: Auto-save configurations per hero
 - **🎨 Modern UI**: Clean, responsive design with smooth animations
+- **📐 Scalable Interface**: Multiple overlay sizes for different setups
 
 ---
 
@@ -67,7 +68,7 @@
 ### Core Workflow
 
 #### 1. Hero Selection 🦸‍♂️
-- Click the **hero preview** or **mask button** to open hero selection
+- Click the **hero preview** or **mask button** (🎭) to open hero selection
 - Browse through the hero database
 - Click any hero to select and load their configuration
 - Hero data is automatically fetched and cached
@@ -75,7 +76,7 @@
 #### 2. Item Management 📦
 - **Left-click** any item slot to open the item browser
 - **Right-click** any slot to clear it instantly
-- Browse through hundreds of items with visual previews
+- Browse through the item database with visual previews
 - Items are organized and searchable
 
 #### 3. Skill Order Planning 🔧
@@ -86,8 +87,8 @@
 
 #### 4. Configuration Management 💾
 - **Auto-save**: Configurations save automatically per hero
-- **Manual save**: Use the save button for explicit saves
-- **Clear all**: Reset button clears items and skills
+- **Save button** (💾): Manual configuration save
+- **Clear button** (🗑️): Reset all items and skills
 - **Persistent storage**: Data survives application restarts
 
 ---
@@ -156,41 +157,32 @@
 #### 🔒 Locked Mode  
 - **Click-Through**: Mouse passes through to game
 - **Read-Only**: View-only mode for gameplay reference
-- **Minimal Distraction**: Reduced visual effects
+- **Reduced Interaction**: Locked elements cannot be modified
 
 ### Audio System
 
 PredOverlay includes rich audio feedback:
-- **Click Sounds**: Satisfying click feedback for all interactions
-- **Item Selection**: Unique sound when selecting items
-- **Hero Selection**: Special audio cue for hero changes
+- **Click Sounds**: Satisfying click feedback for interactions
+- **Item Selection**: Audio cue when selecting items
+- **Hero Selection**: Sound effect for hero changes
 - **Volume Control**: Sounds are pre-balanced at 60% system volume
+
+### Scaling System
+- **Multiple Sizes**: Resize button cycles through different scales
+- **Smart Scaling**: Maintains aspect ratio and positioning
+- **Instant Apply**: No restart required for size changes
 
 ### Data Management
 
 #### Auto-Fetching
-- **Hero Database**: Automatically updated from game APIs
+- **Hero Database**: Updated from JSON files via Python scripts
 - **Item Database**: Fresh item data with each launch
-- **Image Caching**: Efficient asset management
+- **Image Assets**: Efficient asset management and caching
 
 #### Storage System
 - **Per-Hero Configs**: Each hero saves independent settings
 - **LocalStorage**: Browser-based persistence
 - **JSON Format**: Human-readable configuration files
-
----
-
-## 🎨 Customization
-
-### Scaling Options
-- **Multiple Sizes**: Cycle through 50%, 70%, 90%, 100% scales
-- **Smart Scaling**: Maintains aspect ratio and positioning
-- **Instant Apply**: No restart required
-
-### Theme System
-- **Dark Theme**: Optimized for gaming environments
-- **Transparency**: Adjustable opacity levels
-- **Color Coding**: Intuitive color schemes for different elements
 
 ---
 
@@ -280,16 +272,57 @@ PredOverlay runs efficiently in your system tray:
 
 #### Performance Issues
 1. Close unnecessary applications
-2. Reduce overlay scale using the resize button
-3. Disable hardware acceleration in settings
+2. Use the resize button to reduce overlay scale
+3. Disable hardware acceleration (automatically done)
 
 #### Data Not Loading
-1. Check internet connection
-2. Verify Python installation for data scripts
-3. Clear browser cache and restart
+1. Check internet connection for Python data scripts
+2. Verify Python installation
+3. Restart the application
 
 ---
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
+This project is licensed under the **GNU General Public License v3.0** - see the [LICENSE](LICENSE) file for details.
+
+### GPL v3.0 Summary
+- ✅ **Commercial use** - You can use this software commercially
+- ✅ **Modification** - You can modify the source code
+- ✅ **Distribution** - You can distribute this software
+- ✅ **Patent use** - Express grant of patent rights from contributors
+- ⚠️ **Copyleft** - Derivative works must be under the same license
+- ⚠️ **Disclose source** - Source code must be made available
+- ⚠️ **License and copyright notice** - Must include license and copyright notice
+
+---
+
+## 🎯 Support
+
+For support, feature requests, or bug reports:
+
+- **📧 Email**: support@predoverlay.com
+- **🐛 Issues**: [GitHub Issues](https://github.com/your-repo/predoverlay/issues)
+- **💬 Discord**: [Join our community](https://discord.gg/predoverlay)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Since this project is under GPL v3.0:
+
+1. **Fork** the repository
+2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+Please ensure your contributions comply with the GPL v3.0 license terms.
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ for the Predecessor community</sub>
+  <br>
+  <sub>Licensed under GPL v3.0 - Freedom to use, study, share and improve</sub>
+</div>
