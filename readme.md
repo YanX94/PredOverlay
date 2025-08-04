@@ -18,10 +18,13 @@
 
 ### ✨ Features
 
- 🧠 **Smart Hero Suggestions**: Get real-time counter picks and synergy tips based on the draft.
-- 📊 **Build Path Guidance**: Adapt your itemization depending on enemy comp and lane role.
-- 🎯 **Objective Timers**: Visual cues for Fangtooth, Orb Prime, and jungle respawns.
-- 🧩 **Modular UI**: Toggle panels such as mini-map overlays, ward reminders, and cooldown tracking.
+- **📦 Item Management**: Visual item inventory with 7 customizable slots
+- **🦸 Hero Selection**: Comprehensive hero database with quick selection
+- **🔧 Skill Planning**: Interactive 18-level skill order table
+- **🎵 Audio Feedback**: Immersive sound effects for all interactions
+- **⚙️ Persistent Storage**: Auto-save configurations per hero
+- **🎨 Modern UI**: Clean, responsive design with smooth animations
+- **📐 Scalable Interface**: Multiple overlay sizes for different setups
 - 🎮 **Zero Input Interference**: Fully mouse-driven or toggle via hotkey, does not intercept game input.
 
 ---
