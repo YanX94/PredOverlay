@@ -14,18 +14,15 @@
 
 ## 🎯 Overview
 
-**PredOverlay** is a sophisticated, transparent overlay application designed for strategic gaming. It provides real-time item management, hero selection, and skill order planning with an intuitive interface that seamlessly integrates with your gaming experience.
+**PredOverlay** is a modern, purpose-built overlay application designed exclusively for Predecessor, the fast-paced third-person MOBA. This tool provides real-time item management, hero selection, and skill order planning — all optimized to enhance strategic decision-making before and during your matches.
 
-### ✨ Key Features
+### ✨ Features
 
-- **🎮 Game Integration**: Transparent overlay that works with any fullscreen application
-- **📦 Item Management**: Visual item inventory with 7 customizable slots
-- **🦸 Hero Selection**: Comprehensive hero database with quick selection
-- **🔧 Skill Planning**: Interactive 18-level skill order table
-- **🎵 Audio Feedback**: Immersive sound effects for all interactions
-- **⚙️ Persistent Storage**: Auto-save configurations per hero
-- **🎨 Modern UI**: Clean, responsive design with smooth animations
-- **📐 Scalable Interface**: Multiple overlay sizes for different setups
+ 🧠 **Smart Hero Suggestions**: Get real-time counter picks and synergy tips based on the draft.
+- 📊 **Build Path Guidance**: Adapt your itemization depending on enemy comp and lane role.
+- 🎯 **Objective Timers**: Visual cues for Fangtooth, Orb Prime, and jungle respawns.
+- 🧩 **Modular UI**: Toggle panels such as mini-map overlays, ward reminders, and cooldown tracking.
+- 🎮 **Zero Input Interference**: Fully mouse-driven or toggle via hotkey, does not intercept game input.
 
 ---
 
@@ -54,42 +51,6 @@
    ```bash
    npm start
    ```
-
----
-
-## 🎮 How to Use
-
-### Initial Setup
-
-1. **Launch PredOverlay** - The application starts in the system tray
-2. **Double-click the tray icon** to show/hide the overlay
-3. **Press F8** to toggle between clickable and click-through modes
-
-### Core Workflow
-
-#### 1. Hero Selection 🦸‍♂️
-- Click the **hero preview** or **mask button** (🎭) to open hero selection
-- Browse through the hero database
-- Click any hero to select and load their configuration
-- Hero data is automatically fetched and cached
-
-#### 2. Item Management 📦
-- **Left-click** any item slot to open the item browser
-- **Right-click** any slot to clear it instantly
-- Browse through the item database with visual previews
-- Items are organized and searchable
-
-#### 3. Skill Order Planning 🔧
-- **Left-click** skill table cells to assign skill levels (1-18)
-- **Right-click** to remove skill points and auto-reorganize
-- Each row represents a different skill (Q, W, E, R)
-- Visual feedback shows your skill progression
-
-#### 4. Configuration Management 💾
-- **Auto-save**: Configurations save automatically per hero
-- **Save button** (💾): Manual configuration save
-- **Clear button** (🗑️): Reset all items and skills
-- **Persistent storage**: Data survives application restarts
 
 ---
 
