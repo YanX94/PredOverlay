@@ -258,6 +258,12 @@ This project is licensed under the **GNU General Public License v3.0** - see the
 
 ---
 
+## ☕ Support the Project
+
+If you find PredOverlay useful, consider [buying me a coffee](https://buymeacoffee.com/yannoel94n). Your support helps with future features like draft tracking, advanced teamfight stats, timers, and more.
+
+---
+
 ## 🎯 Support
 
 For support, feature requests, or bug reports:
