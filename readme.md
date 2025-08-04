@@ -1,7 +1,7 @@
 # PredOverlay
 
 <div align="center">
-  <img src="assets/images/ico_s.png" alt="PredOverlay Logo" width="128"/>
+  <img src="assets/images/prewview.png" alt="preview" width="100%"/>
   
   **A Modern Game Overlay Tool for Strategic Planning**
   
@@ -41,7 +41,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-repo/predoverlay.git
+   git clone https://github.com/YanX94/PredOverlay.git
    cd predoverlay
    ```
 
@@ -301,9 +301,9 @@ This project is licensed under the **GNU General Public License v3.0** - see the
 
 For support, feature requests, or bug reports:
 
-- **📧 Email**: support@predoverlay.com
-- **🐛 Issues**: [GitHub Issues](https://github.com/your-repo/predoverlay/issues)
-- **💬 Discord**: [Join our community](https://discord.gg/predoverlay)
+- **📧 Email**: yannoel94@gmail.com
+- **🐛 Issues**: [GitHub Issues](https://github.com/YanX94/PredOverlay/issues)
+- **💬 Discord**: [Join our community](https://discord.gg/7y39ZYesyB)
 
 ---
 
