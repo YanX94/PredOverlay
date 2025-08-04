@@ -1,45 +1,58 @@
-  const { ipcRenderer } = require("electron");
+const { ipcRenderer } = require("electron");
 
-  // ==========================================
-  // GLOBAL VARIABLES & STATE MANAGEMENT
-  // ==========================================
-  let isLocked = false;
-  let itemsCache = [];
-  let heroesCache = [];
-  let selectedHero = null;
-  let currentLevel = 1;
-  const maxLevels = 18;
-  const skills = ["mouse-right", "q", "e", "r"];
-  
-  // Skill order state: 4 skills x 18 levels matrix
-  const state = Array(4).fill(null).map(() => Array(maxLevels).fill(null));
+// ==========================================
+// GLOBAL VARIABLES & STATE MANAGEMENT
+// ==========================================
 
-  // DOM elements
-  const slots = document.querySelectorAll(".item-slot");
-  const modal = document.getElementById("item-modal");
-  const table = document.getElementById("skill-table");
-  const heroBtn = document.getElementById("choose-hero-btn");
-  const heroBtn2 = document.getElementById("selected-hero-preview");
-  const heroModal = document.getElementById("hero-modal");
-  const selectedHeroSpan = document.getElementById("selected-hero");
+/**
+ * Core application state variables
+ */
+let isLocked = false;           // Tracks overlay interaction lock state
+let itemsCache = [];            // Cached items data from JSON
+let heroesCache = [];           // Cached heroes data from JSON  
+let selectedHero = null;        // Currently selected hero object
+let currentLevel = 1;           // Current skill level being assigned
+const maxLevels = 18;           // Maximum skill levels available
+const skills = ["mouse-right", "q", "e", "r"]; // Skill identifiers
 
-  // ==========================================
-  // OVERLAY LOCK/UNLOCK SYSTEM
-  // ==========================================
+/**
+ * Skill order state: 4 skills × 18 levels matrix
+ * Each cell contains null or the level number when that skill was leveled
+ */
+const state = Array(4).fill(null).map(() => Array(maxLevels).fill(null));
+
+/**
+ * DOM element references for performance
+ */
+const slots = document.querySelectorAll(".item-slot");
+const modal = document.getElementById("item-modal");
+const table = document.getElementById("skill-table");
+const heroBtn = document.getElementById("choose-hero-btn");
+const heroBtn2 = document.getElementById("selected-hero-preview");
+const heroModal = document.getElementById("hero-modal");
+
+// ==========================================
+// OVERLAY LOCK/UNLOCK SYSTEM
+// ==========================================
+
+/**
+ * Handles overlay interaction state changes from main process
+ * Updates UI elements and applies locked/unlocked styling
+ */
 ipcRenderer.on("update-clickable-status", (_, isClickable) => {
   const status = document.getElementById("status");
   const overlayBox = document.getElementById("overlay-box");
   isLocked = !isClickable;
 
-  // Toggle locked class on interactive elements
+  // Apply locked styling to interactive elements
   document.querySelectorAll(".item-slot, #skill-table td").forEach((el) => {
     el.classList.toggle("locked", isLocked);
   });
 
-  // Ajoute cette ligne ici :
+  // Apply locked styling to hero preview
   document.getElementById('selected-hero-preview').classList.toggle('locked', isLocked);
 
-  // Update UI status
+  // Update status display
   if (isClickable) {
     status.className = "active";
     status.innerText = "UNLOCKED";
@@ -51,50 +64,70 @@ ipcRenderer.on("update-clickable-status", (_, isClickable) => {
   }
 });
 
-  // ==========================================
-  // ITEM SLOTS MANAGEMENT
-  // ==========================================
-  
-  // Load items from JSON file
-  async function loadItems() {
-    if (itemsCache.length === 0) {
-      try {
-        const res = await fetch("assets/json/items.json");
-        itemsCache = await res.json();
-      } catch (err) {
-        console.error("Error loading items:", err);
-      }
+// ==========================================
+// ITEM MANAGEMENT SYSTEM
+// ==========================================
+
+/**
+ * Loads items data from JSON file with caching
+ * @returns {Promise<void>}
+ */
+async function loadItems() {
+  if (itemsCache.length === 0) {
+    try {
+      const response = await fetch("assets/json/items.json");
+      itemsCache = await response.json();
+    } catch (error) {
+      console.error("Error loading items:", error);
+      itemsCache = [];
     }
   }
+}
 
-  // Show item selection modal
-  function showItemModal(targetSlot) {
-    modal.innerHTML = `
-      <button id="close-item-modal">✖</button>
-      ${itemsCache.map(item => 
-        `<img src="${item.image}" data-id="${item.id}" class="item-choice" 
-             title="${item.name}" style="width:64px;height:64px;margin:6px;cursor:pointer;border:2px solid #222;">`
-      ).join("")}
-    `;
-    modal.style.display = "block";
+/**
+ * Displays item selection modal for a specific slot
+ * @param {HTMLElement} targetSlot - The item slot being configured
+ */
+function showItemModal(targetSlot) {
+  // Generate modal content with items grid
+  modal.innerHTML = `
+    <button id="close-item-modal">✖</button>
+    ${itemsCache.map(item => 
+      `<img src="${item.image}" data-id="${item.id}" class="item-choice" 
+           title="${item.name}" style="width:64px;height:64px;margin:6px;cursor:pointer;border:2px solid #222;">`
+    ).join("")}
+  `;
+  
+  modal.style.display = "block";
+  document.querySelector('.skill-order').style.display = 'none';
 
-    // Close modal handler
-    document.getElementById("close-item-modal").onclick = () => {
+  // Add sound handlers via sound system
+  window.addModalSounds.item(modal);
+
+  // Handle modal close
+  document.getElementById("close-item-modal").onclick = () => {
+    modal.style.display = "none";
+    document.querySelector('.skill-order').style.display = '';
+  };
+
+  // Handle item selection
+  document.querySelectorAll(".item-choice").forEach((img) => {
+    img.addEventListener("click", () => {
+      if (isLocked) return;
+      
+      const selectedItem = itemsCache.find((item) => item.id == img.dataset.id);
+      targetSlot.innerHTML = `<img src="${selectedItem.image}" alt="${selectedItem.name}" style="width: 64px; height: 64px;">`;
+      
       modal.style.display = "none";
-    };
-
-    // Item selection handlers
-    document.querySelectorAll(".item-choice").forEach((img) => {
-      img.addEventListener("click", () => {
-        if (isLocked) return;
-        const selected = itemsCache.find((i) => i.id == img.dataset.id);
-        targetSlot.innerHTML = `<img src="${selected.image}" alt="${selected.name}" style="width: 64px; height: 64px;">`;
-        modal.style.display = "none";
-      });
+      document.querySelector('.skill-order').style.display = '';
     });
-  }
+  });
+}
 
-  // Initialize item slots
+/**
+ * Initialize item slot event listeners
+ */
+function initializeItemSlots() {
   slots.forEach((slot) => {
     // Right-click to clear slot
     slot.addEventListener("contextmenu", (e) => {
@@ -103,250 +136,342 @@ ipcRenderer.on("update-clickable-status", (_, isClickable) => {
       slot.innerHTML = "";
     });
 
-    // Left-click to select item
+    // Left-click to open item selection
     slot.addEventListener("click", async () => {
       if (isLocked) return;
       await loadItems();
       showItemModal(slot);
     });
   });
+}
 
-  // ==========================================
-  // SKILL ORDER TABLE MANAGEMENT
-  // ==========================================
+// ==========================================
+// SKILL ORDER TABLE SYSTEM
+// ==========================================
 
-  // Create skill table dynamically
-  function createTable() {
-    for (let i = 0; i < skills.length; i++) {
-      const row = document.createElement("tr");
+/**
+ * Creates the skill order table dynamically
+ * Generates rows for each skill with level columns
+ */
+function createSkillTable() {
+  skills.forEach((skill, skillIndex) => {
+    const row = document.createElement("tr");
 
-      // Skill icon column
-      const iconCell = document.createElement("td");
-      iconCell.classList.add("skill-icon");
-      const img = document.createElement("img");
-img.src = `assets/images/${skills[i]}.png`;
-      img.alt = skills[i].toUpperCase();
-      iconCell.appendChild(img);
-      row.appendChild(iconCell);
-
-      // Level columns
-      for (let j = 0; j < maxLevels; j++) {
-        const cell = document.createElement("td");
-        cell.dataset.row = i;
-        cell.dataset.col = j;
-        cell.addEventListener("click", handleLeftClick);
-        cell.addEventListener("contextmenu", handleRightClick);
-        row.appendChild(cell);
-      }
-
-      table.appendChild(row);
-    }
-  }
-
-  // Add skill level on left-click
-  function handleLeftClick(e) {
-    if (isLocked) return;
-    const row = parseInt(e.target.dataset.row);
-    const col = parseInt(e.target.dataset.col);
-
-    if (state[row][col] === null && currentLevel <= maxLevels) {
-      state[row][col] = currentLevel;
-      e.target.classList.add("skill-level");
-      e.target.textContent = currentLevel++;
-    }
-  }
-
-  // Remove skill level on right-click and reorganize
-  function handleRightClick(e) {
-    if (isLocked) return;
-    e.preventDefault();
-    const row = parseInt(e.target.dataset.row);
-    const col = parseInt(e.target.dataset.col);
-
-    if (state[row][col] !== null) {
-      const removed = state[row][col];
-      state[row][col] = null;
-      e.target.classList.remove("skill-level");
-      e.target.textContent = "";
-
-      // Reorganize remaining levels
-      for (let i = 0; i < state.length; i++) {
-        for (let j = 0; j < state[i].length; j++) {
-          if (state[i][j] && state[i][j] > removed) {
-            state[i][j] -= 1;
-            const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-            cell.textContent = state[i][j];
-          }
-        }
-      }
-      currentLevel -= 1;
-    }
-  }
-
-  // ==========================================
-  // HERO SELECTION SYSTEM
-  // ==========================================
-  
-  // Load heroes from JSON file
-  async function loadHeroes() {
-    if (heroesCache.length === 0) {
-      try {
-        const res = await fetch("assets/json/heroes.json");
-        heroesCache = await res.json();
-      } catch (err) {
-        console.error("Error loading heroes:", err);
-        heroesCache = [];
-      }
-    }
-  }
-
-  // Show hero selection modal
-  async function showHeroModal() {
-    await loadHeroes();
-
-    heroModal.innerHTML = `
-      <button id="close-hero-modal" style="">✖</button>
-      ${heroesCache.map(hero => 
-        `<img src="${hero.image}" data-id="${hero.id}" title="${hero.display_name || hero.name}" 
-             class="hero-choice" style="width:64px;height:64px;margin:6px;cursor:pointer;border:2px solid #222;">`
-      ).join("")}
-    `;
-    heroModal.style.display = "block";
-
-    // Close modal handler
-    document.getElementById("close-hero-modal").onclick = () => {
-      heroModal.style.display = "none";
-    };
-
-    // Hero selection handlers
-    document.querySelectorAll(".hero-choice").forEach((img) => {
-      img.addEventListener("click", () => {
-        selectedHero = heroesCache.find((h) => h.id == img.dataset.id);
-        
-        // Update hero preview
-        const preview = document.getElementById("selected-hero-preview");
-        preview.innerHTML = `<img src="${selectedHero.image}" alt="${selectedHero.display_name || selectedHero.name}" 
-                                  title="${selectedHero.display_name || selectedHero.name}">`;
+    // Create skill icon cell
+    const iconCell = document.createElement("td");
+    iconCell.classList.add("skill-icon");
     
-        heroModal.style.display = "none";
-        loadHeroConfig(selectedHero.id);
+    const skillIcon = document.createElement("img");
+    skillIcon.src = `assets/images/${skill}.png`;
+    skillIcon.alt = skill.toUpperCase();
+    iconCell.appendChild(skillIcon);
+    row.appendChild(iconCell);
+
+    // Create level cells for this skill
+    for (let levelIndex = 0; levelIndex < maxLevels; levelIndex++) {
+      const levelCell = document.createElement("td");
+      levelCell.dataset.row = skillIndex;
+      levelCell.dataset.col = levelIndex;
+      levelCell.addEventListener("click", handleLeftClick);
+      levelCell.addEventListener("contextmenu", handleRightClick);
+      row.appendChild(levelCell);
+    }
+
+    table.appendChild(row);
+  });
+}
+
+/**
+ * Handles left-click on skill table cells
+ * Adds a skill level at the clicked position
+ * @param {Event} event - Click event
+ */
+function handleLeftClick(event) {
+  if (isLocked) return;
+  
+  window.addModalSounds.skillClick();
+  
+  const row = parseInt(event.target.dataset.row);
+  const col = parseInt(event.target.dataset.col);
+
+  // Add skill level if cell is empty and we haven't exceeded max levels
+  if (state[row][col] === null && currentLevel <= maxLevels) {
+    state[row][col] = currentLevel;
+    event.target.classList.add("skill-level");
+    event.target.textContent = currentLevel++;
+  }
+}
+
+/**
+ * Handles right-click on skill table cells
+ * Removes a skill level and reorganizes remaining levels
+ * @param {Event} event - Right-click event
+ */
+function handleRightClick(event) {
+  if (isLocked) return;
+  
+  event.preventDefault();
+  window.addModalSounds.skillClick();
+  
+  const row = parseInt(event.target.dataset.row);
+  const col = parseInt(event.target.dataset.col);
+
+  if (state[row][col] !== null) {
+    const removedLevel = state[row][col];
+    state[row][col] = null;
+    event.target.classList.remove("skill-level");
+    event.target.textContent = "";
+
+    // Reorganize higher levels by decrementing them
+    state.forEach((skillRow, skillIndex) => {
+      skillRow.forEach((level, levelIndex) => {
+        if (level && level > removedLevel) {
+          state[skillIndex][levelIndex] = level - 1;
+          const cell = document.querySelector(`[data-row="${skillIndex}"][data-col="${levelIndex}"]`);
+          if (cell) cell.textContent = level - 1;
+        }
       });
     });
+    
+    currentLevel--;
   }
+}
 
-  // ==========================================
-  // CONFIGURATION SAVE/LOAD SYSTEM
-  // ==========================================
+// ==========================================
+// HERO SELECTION SYSTEM
+// ==========================================
+
+/**
+ * Loads heroes data from JSON file with caching
+ * @returns {Promise<void>}
+ */
+async function loadHeroes() {
+  if (heroesCache.length === 0) {
+    try {
+      const response = await fetch("assets/json/heroes.json");
+      heroesCache = await response.json();
+    } catch (error) {
+      console.error("Error loading heroes:", error);
+      heroesCache = [];
+    }
+  }
+}
+
+/**
+ * Displays hero selection modal
+ * @returns {Promise<void>}
+ */
+async function showHeroModal() {
+  await loadHeroes();
+
+  // Generate modal content with heroes grid
+  heroModal.innerHTML = `
+    <button id="close-hero-modal">✖</button>
+    ${heroesCache.map(hero => 
+      `<img src="${hero.image}" data-id="${hero.id}" title="${hero.display_name || hero.name}" 
+           class="hero-choice" style="width:64px;height:64px;margin:6px;cursor:pointer;border:2px solid #222;">`
+    ).join("")}
+  `;
   
-  // Save current configuration to localStorage
-  function saveHeroConfig() {
-    if (!selectedHero) return;
-    
-    const config = {
-      items: Array.from(slots).map(slot => slot.querySelector("img")?.src || null),
-      skillOrder: state.map(row => [...row])
-    };
-    
-    localStorage.setItem("heroConfig_" + selectedHero.id, JSON.stringify(config));
-  }
+  heroModal.style.display = "block";
+  document.querySelector('.skill-order').style.display = 'none';
 
-  // Load configuration from localStorage
-  function loadHeroConfig(heroId) {
-    const configStr = localStorage.getItem("heroConfig_" + heroId);
-    
-    if (!configStr) {
-      clearAllConfig();
-      return;
-    }
+  // Add sound handlers via sound system
+  window.addModalSounds.hero(heroModal);
 
-    const config = JSON.parse(configStr);
+  // Handle modal close
+  document.getElementById("close-hero-modal").onclick = () => {
+    heroModal.style.display = "none";
+    document.querySelector('.skill-order').style.display = '';
+  };
 
-    // Load items
-    slots.forEach((slot, i) => {
-      slot.innerHTML = config.items[i] ? 
-        `<img src="${config.items[i]}" style="width:64px;height:64px;">` : "";
+  // Handle hero selection
+  document.querySelectorAll(".hero-choice").forEach((heroImage) => {
+    heroImage.addEventListener("click", () => {
+      selectedHero = heroesCache.find((hero) => hero.id == heroImage.dataset.id);
+      
+      // Update hero preview display
+      const preview = document.getElementById("selected-hero-preview");
+      preview.innerHTML = `<img src="${selectedHero.image}" alt="${selectedHero.display_name || selectedHero.name}" 
+                                title="${selectedHero.display_name || selectedHero.name}">`;
+  
+      heroModal.style.display = "none";
+      document.querySelector('.skill-order').style.display = '';
+      loadHeroConfig(selectedHero.id);
     });
+  });
+}
 
-    // Load skill order
-    for (let i = 0; i < state.length; i++) {
-      for (let j = 0; j < state[i].length; j++) {
-        state[i][j] = config.skillOrder[i][j];
-        const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-        
-        if (cell) {
-          if (state[i][j]) {
-            cell.classList.add("skill-level");
-            cell.textContent = state[i][j];
-          } else {
-            cell.classList.remove("skill-level");
-            cell.textContent = "";
-          }
-        }
-      }
-    }
-    
-    currentLevel = Math.max(1, ...state.flat().filter(x => x !== null)) + 1;
+// ==========================================
+// CONFIGURATION PERSISTENCE SYSTEM
+// ==========================================
+
+/**
+ * Saves current configuration to localStorage
+ * Stores items and skill order for the selected hero
+ */
+function saveHeroConfig() {
+  if (!selectedHero) return;
+  
+  const configuration = {
+    items: Array.from(slots).map(slot => 
+      slot.querySelector("img")?.src || null
+    ),
+    skillOrder: state.map(row => [...row])
+  };
+  
+  localStorage.setItem(`heroConfig_${selectedHero.id}`, JSON.stringify(configuration));
+}
+
+/**
+ * Loads configuration from localStorage for a specific hero
+ * @param {string} heroId - Hero identifier
+ */
+function loadHeroConfig(heroId) {
+  const configString = localStorage.getItem(`heroConfig_${heroId}`);
+  
+  if (!configString) {
+    clearAllConfig();
+    return;
   }
 
-  // Clear all items and skill order
-  function clearAllConfig() {
-    // Clear items
-    slots.forEach(slot => slot.innerHTML = "");
-    
-    // Clear skill order
-    for (let i = 0; i < state.length; i++) {
-      for (let j = 0; j < state[i].length; j++) {
-        state[i][j] = null;
-        const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-        if (cell) {
+  const configuration = JSON.parse(configString);
+
+  // Restore item slots
+  slots.forEach((slot, index) => {
+    slot.innerHTML = configuration.items[index] ? 
+      `<img src="${configuration.items[index]}" style="width:64px;height:64px;">` : "";
+  });
+
+  // Restore skill order
+  state.forEach((skillRow, skillIndex) => {
+    skillRow.forEach((_, levelIndex) => {
+      state[skillIndex][levelIndex] = configuration.skillOrder[skillIndex][levelIndex];
+      const cell = document.querySelector(`[data-row="${skillIndex}"][data-col="${levelIndex}"]`);
+      
+      if (cell) {
+        if (state[skillIndex][levelIndex]) {
+          cell.classList.add("skill-level");
+          cell.textContent = state[skillIndex][levelIndex];
+        } else {
           cell.classList.remove("skill-level");
           cell.textContent = "";
         }
       }
-    }
-    currentLevel = 1;
-  }
-
-  // ==========================================
-  // EVENT LISTENERS & INITIALIZATION
-  // ==========================================
-  
-  // Initialize skill table
-  createTable();
-
-  // Hero selection buttons
-  heroBtn.addEventListener("click", showHeroModal);
-  heroBtn2.addEventListener("click", showHeroModal);
-
-  // Configuration buttons
-  document.getElementById("save-config-btn").addEventListener("click", saveHeroConfig);
-  document.getElementById("clear-config-btn").addEventListener("click", clearAllConfig);
-
-  // Close hero modal when clicking outside
-  document.addEventListener("click", (e) => {
-    if (heroModal.style.display === "block" && 
-        !heroModal.contains(e.target) && 
-        e.target !== heroBtn && 
-        e.target !== heroBtn2) {
-      heroModal.style.display = "none";
-    }
+    });
   });
-
-// Overlay resizer logic
-let overlayScale = parseFloat(localStorage.getItem('overlayScale')) || 1.0;
-const minScale = 0.5;
-const scaleStep = 0.1;
-
-function applyOverlayScale() {
-  document.getElementById('overlay-wrapper').style.transform = `scale(${overlayScale})`;
+  
+  // Update current level counter
+  const allLevels = state.flat().filter(level => level !== null);
+  currentLevel = allLevels.length > 0 ? Math.max(...allLevels) + 1 : 1;
 }
 
-// Applique la taille au chargement
-applyOverlayScale();
+/**
+ * Clears all items and skill order configuration
+ */
+function clearAllConfig() {
+  // Clear all item slots
+  slots.forEach(slot => slot.innerHTML = "");
+  
+  // Clear skill order state and UI
+  state.forEach((skillRow, skillIndex) => {
+    skillRow.forEach((_, levelIndex) => {
+      state[skillIndex][levelIndex] = null;
+      const cell = document.querySelector(`[data-row="${skillIndex}"][data-col="${levelIndex}"]`);
+      if (cell) {
+        cell.classList.remove("skill-level");
+        cell.textContent = "";
+      }
+    });
+  });
+  
+  currentLevel = 1;
+}
 
-document.getElementById('size-btn').addEventListener('click', () => {
+// ==========================================
+// OVERLAY SCALING SYSTEM
+// ==========================================
+
+/**
+ * Overlay scaling configuration
+ */
+let overlayScale = parseFloat(localStorage.getItem('overlayScale')) || 1.0;
+const minScale = 0.5;
+const scaleStep = 0.2;
+
+/**
+ * Applies the current scale to the overlay wrapper
+ * Includes display cycling to force re-render and fix visual glitches
+ */
+function applyOverlayScale() {
+  const wrapper = document.getElementById('overlay-wrapper');
+  wrapper.style.transform = `scale(${overlayScale})`;
+  
+  // Force repaint to prevent rendering issues
+  wrapper.style.display = 'none';
+  void wrapper.offsetHeight; // Trigger reflow
+  wrapper.style.display = '';
+}
+
+/**
+ * Handles resize button clicks
+ * Decreases scale by step, resets to 100% when reaching minimum
+ */
+function handleResizeButton() {
   overlayScale -= scaleStep;
   if (overlayScale < minScale) overlayScale = 1.0;
-  localStorage.setItem('overlayScale', overlayScale); // Sauvegarde la taille
+  
+  localStorage.setItem('overlayScale', overlayScale);
   applyOverlayScale();
-});
+}
+
+// ==========================================
+// MODAL OUTSIDE CLICK HANDLER
+// ==========================================
+
+/**
+ * Closes hero modal when clicking outside of it
+ * @param {Event} event - Click event
+ */
+function handleOutsideClick(event) {
+  if (heroModal.style.display === "block" && 
+      !heroModal.contains(event.target) && 
+      event.target !== heroBtn && 
+      event.target !== heroBtn2) {
+    heroModal.style.display = "none";
+    document.querySelector('.skill-order').style.display = '';
+  }
+}
+
+// ==========================================
+// INITIALIZATION & EVENT BINDING
+// ==========================================
+
+/**
+ * Initialize all application systems
+ */
+function initializeApplication() {
+  // Create skill table
+  createSkillTable();
+  
+  // Initialize item slots
+  initializeItemSlots();
+  
+  // Apply saved overlay scale
+  applyOverlayScale();
+  
+  // Bind hero selection buttons
+  heroBtn.addEventListener("click", showHeroModal);
+  heroBtn2.addEventListener("click", showHeroModal);
+  
+  // Bind configuration buttons
+  document.getElementById("save-config-btn").addEventListener("click", saveHeroConfig);
+  document.getElementById("clear-config-btn").addEventListener("click", clearAllConfig);
+  document.getElementById('size-btn').addEventListener('click', handleResizeButton);
+  
+  // Bind outside click handler
+  document.addEventListener("click", handleOutsideClick);
+}
+
+// Start the application
+initializeApplication();
