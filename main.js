@@ -3,7 +3,7 @@ const { execFile } = require('child_process');
 const path = require('path');
 
 let win;
-let isClickable = false;
+let isClickable = true;
 
 function createWindow() {
   win = new BrowserWindow({
@@ -28,41 +28,48 @@ function createWindow() {
   // 🛠️ Renforce la priorité de la fenêtre (niveau screen-saver)
   win.setAlwaysOnTop(true, 'screen-saver');
   win.setVisibleOnAllWorkspaces(true); // multi-écrans
-  win.setIgnoreMouseEvents(true, { forward: true }); // Démarre non-cliquable
+win.setIgnoreMouseEvents(!isClickable, { forward: true }); // Démarre cliquable
   win.loadFile('index.html');
 }
 
 app.disableHardwareAcceleration();
 
 app.whenReady().then(() => {
-  // Exécute le script Python pour générer heroes.json avant d'ouvrir la fenêtre
-  execFile('python', [path.join(__dirname, 'fetch_heroes.py')], (error, stdout, stderr) => {
+  // Exécute le script Python pour générer heroes.json
+  execFile('python', [path.join(__dirname, 'python/json$fetch_heroes.py')], (error, stdout, stderr) => {
     if (error) {
       console.error('Erreur lors de l\'exécution de fetch_heroes.py:', error);
     }
-    createWindow();
 
-    // 🎮 F8 : toggle clic / overlay
-    globalShortcut.register('F8', () => {
-      isClickable = !isClickable;
-      if (win) {
-        win.setIgnoreMouseEvents(!isClickable, { forward: true });
-        win.webContents.send('update-clickable-status', isClickable);
-        if (isClickable) win.focus();
-        console.log(`[Overlay] Mode cliquable: ${isClickable}`);
+    // Exécute le script Python pour générer items.json
+    execFile('python', [path.join(__dirname, 'python/json/fetch_items.py')], (error2, stdout2, stderr2) => {
+      if (error2) {
+        console.error('Erreur lors de l\'exécution de fetch_items.py:', error2);
       }
-    });
 
-    // 🧲 F7 : remet l'overlay tout en haut
-    globalShortcut.register('F7', () => {
-      if (win) {
-        win.setVisibleOnAllWorkspaces(true);
-        win.setAlwaysOnTop(true, 'screen-saver');
-        win.setMenuBarVisibility(false);
-        win.setAutoHideMenuBar(true);
-        win.showInactive(); // Remonte sans voler le focus
-        console.log('[Overlay] Forcé en avant-plan via F7');
-      }
+      createWindow();
+
+      // ...existing shortcut code...
+      globalShortcut.register('F8', () => {
+        isClickable = !isClickable;
+        if (win) {
+          win.setIgnoreMouseEvents(!isClickable, { forward: true });
+          win.webContents.send('update-clickable-status', isClickable);
+          if (isClickable) win.focus();
+          console.log(`[Overlay] Mode cliquable: ${isClickable}`);
+        }
+      });
+
+      globalShortcut.register('F7', () => {
+        if (win) {
+          win.setVisibleOnAllWorkspaces(true);
+          win.setAlwaysOnTop(true, 'screen-saver');
+          win.setMenuBarVisibility(false);
+          win.setAutoHideMenuBar(true);
+          win.showInactive();
+          console.log('[Overlay] Forcé en avant-plan via F7');
+        }
+      });
     });
   });
 });
@@ -70,3 +77,47 @@ app.whenReady().then(() => {
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
