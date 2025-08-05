@@ -454,12 +454,29 @@ function applySkillTableVisibility() {
   document.querySelector(".skill-order").style.display = skillTableVisible ? "" : "none";
 }
 
+function applyItemSlotsVisibility() {
+  const itemSlotsVisible = JSON.parse(localStorage.getItem("itemSlotsVisible") ?? "true");
+  document.getElementById("toggle-item-slots").checked = itemSlotsVisible;
+  document.getElementById("item-slots").style.display = itemSlotsVisible ? "" : "none";
+  
+  // Ajuste l'espacement du tableau des skills selon la visibilité des items
+  const skillOrder = document.querySelector(".skill-order");
+  if (skillOrder) {
+    if (itemSlotsVisible) {
+      skillOrder.classList.remove("items-hidden");
+    } else {
+      skillOrder.classList.add("items-hidden");
+    }
+  }
+}
+
 function applyOverlayOpacity() {
   const opacity = parseFloat(localStorage.getItem("overlayOpacity") ?? "1");
   document.getElementById("overlay-opacity").value = opacity;
   document.getElementById("opacity-value").textContent = Math.round(opacity * 100) + "%";
   document.getElementById("overlay-wrapper").style.opacity = opacity;
 }
+
 // ==========================================
 // INITIALIZATION & EVENT BINDING
 // ==========================================
@@ -489,8 +506,10 @@ function initializeApplication() {
   // Bind outside click handler
   document.addEventListener("click", handleOutsideClick);
 
-  // Appliquer la visibilité du skill table au démarrage
+  // Appliquer la visibilité des éléments au démarrage
   applySkillTableVisibility();
+  applyItemSlotsVisibility(); // <-- Nouvelle fonction
+  applyOverlayOpacity();
 }
 
 // Start the application
@@ -509,9 +528,49 @@ document.getElementById("close-settings-modal").addEventListener("click", () => 
 // Toggle skill table visibility
 document.getElementById("toggle-skill-table").addEventListener("change", (e) => {
   const visible = e.target.checked;
+  const itemSlotsToggle = document.getElementById("toggle-item-slots");
+  
+  // Vérifier si on essaie de décocher alors que les items sont déjà décochés
+  if (!visible && !itemSlotsToggle.checked) {
+    // Empêcher de décocher si les deux seraient off
+    e.target.checked = true;
+    // Optionnel: afficher un message d'avertissement
+    console.warn("Au moins une section doit rester visible !");
+    return;
+  }
+  
   document.querySelector(".skill-order").style.display = visible ? "" : "none";
   localStorage.setItem("skillTableVisible", JSON.stringify(visible));
 });
+
+// Toggle item slots visibility
+document.getElementById("toggle-item-slots").addEventListener("change", (e) => {
+  const visible = e.target.checked;
+  const skillTableToggle = document.getElementById("toggle-skill-table");
+  
+  // Vérifier si on essaie de décocher alors que les skills sont déjà décochés
+  if (!visible && !skillTableToggle.checked) {
+    // Empêcher de décocher si les deux seraient off
+    e.target.checked = true;
+    // Optionnel: afficher un message d'avertissement
+    console.warn("Au moins une section doit rester visible !");
+    return;
+  }
+  
+  document.getElementById("item-slots").style.display = visible ? "" : "none";
+  localStorage.setItem("itemSlotsVisible", JSON.stringify(visible));
+  
+  // Ajuste l'espacement du tableau des skills
+  const skillOrder = document.querySelector(".skill-order");
+  if (skillOrder) {
+    if (visible) {
+      skillOrder.classList.remove("items-hidden");
+    } else {
+      skillOrder.classList.add("items-hidden");
+    }
+  }
+});
+
 
 // Overlay opacity control
 document.getElementById("overlay-opacity").addEventListener("input", (e) => {
@@ -521,8 +580,50 @@ document.getElementById("overlay-opacity").addEventListener("input", (e) => {
   localStorage.setItem("overlayOpacity", opacity.toString());
 });
 
-// Appliquer le paramètre au démarrage (sécurité si DOMContentLoaded est utilisé ailleurs)
+// Appliquer les paramètres au démarrage
 window.addEventListener("DOMContentLoaded", () => {
   applySkillTableVisibility();
+  applyItemSlotsVisibility(); // <-- Nouvelle fonction
   applyOverlayOpacity();
 });
+
+
+
+
+
+
+const slider = document.getElementById("overlay-opacity");
+const output = document.getElementById("opacity-value");
+
+function updateSliderStyle() {
+  const value = slider.value;
+  const min = slider.min;
+  const max = slider.max;
+  const percentage = ((value - min) / (max - min)) * 100;
+
+  slider.style.background = `linear-gradient(to right, #22bceb ${percentage}%, #393939 ${percentage}%)`;
+  output.textContent = value;
+}
+
+slider.addEventListener("input", updateSliderStyle);
+updateSliderStyle();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

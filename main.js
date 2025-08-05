@@ -75,6 +75,53 @@ function createMainWindow() {
   
   // Load the main interface
   mainWindow.loadFile('index.html');
+
+
+
+
+ // Créer la fenêtre de timers
+  timersWindow = new BrowserWindow({
+    width: 400,
+    height: 380,
+    frame: false,
+    transparent: true,
+    hasShadow: false,
+    resizable: false,
+    
+    // Window behavior
+    alwaysOnTop: true,
+    skipTaskbar: true,  // Hide from taskbar - now in system tray
+    show: false,        // Don't show initially
+    titleBarStyle: 'customButtonsOnHover',
+    
+    // Application icon
+    icon: path.join(__dirname, 'assets', 'images', 'ico_s.png'),
+    
+    // Security and integration settings
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  });
+
+  timersWindow.loadFile('timers.html');
+
+  // Raccourci pour montrer/masquer timers (ex: F9)
+  globalShortcut.register('F9', () => {
+    if (timersWindow.isVisible()) {
+      timersWindow.hide();
+    } else {
+      timersWindow.show();
+    }
+  });
+
+
+
+
+
+
+
+  
   
   // Show window after loading
   mainWindow.once('ready-to-show', () => {

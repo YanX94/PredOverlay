@@ -315,7 +315,16 @@ button:hover {
   width: fit-content;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
   border: 1px solid #232323;
-  margin-top: 7px;
+  margin-top: 8px;
+  transition: margin-top 0.3s ease;
+
+}
+
+.skill-order.items-hidden {
+  padding-top: 100px !important; /* <-- Espace suffisant pour éviter l'overlap */
+  background: transparent !important; /* <-- Fond transparent pour éviter le chevauchement */
+  border: none !important; /* <-- Pas de bordure pour éviter le chevauchement */
+  box-shadow: none !important; /* <-- Pas d'ombre pour éviter le chevauchement */
 }
 
 table {
@@ -605,7 +614,7 @@ td.locked:hover {
   content: "⚙";
   font-size: 18px;
   color: #22bceb;
-  text-shadow: 0 2px 8px rgba(34, 188, 235, 0.4);
+  text-shadow: 0 2px 8px #22bceb(34, 188, 235, 0.4);
   margin-top:4px;
 }
 
@@ -623,9 +632,9 @@ td.locked:hover {
 }
 
 .setting-row input[type="checkbox"]:checked {
-  background: linear-gradient(45deg, #2ecc40, #27ae60);
-  border-color: #2ecc40;
-  box-shadow: 0 4px 16px rgba(46, 204, 64, 0.3);
+  background: linear-gradient(45deg, #22bceb, #22bceb);
+  border-color: #22bceb;
+  box-shadow: 0 4px 16px #22bceb6e;
 }
 
 .setting-row input[type="checkbox"]::after {
@@ -673,7 +682,7 @@ td.locked:hover {
   width: 300px;
   height: 6px;
   border-radius: 3px;
-  background: #393939;
+ background: #393939; /* <-- Track en gris foncé */
   outline: none;
   cursor: pointer;
 }
@@ -713,9 +722,61 @@ td.locked:hover {
   text-align: center;
 }
 
+
 /* Ajustement pour les sliders dans setting-row */
 .setting-row input[type="range"] + #opacity-value {
   margin-left: 12px;
 }
 
+
+/* Custom Range Slider Styling */
+.setting-row input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 300px;
+  height: 6px;
+  border-radius: 3px;
+  background: #393939; /* <-- Track en gris foncé */
+  outline: none;
+  cursor: pointer;
+}
+
+.setting-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #22bceb, #1e9cc4);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(34, 188, 235, 0.4); /* <-- Corrige la couleur d'ombre */
+  transition: all 0.3s ease;
+
+    margin-top:-6px !important;
+}
+
+.setting-row input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(34, 188, 235, 0.6);
+}
+
+.setting-row input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #22bceb, #1e9cc4);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(34, 188, 235, 0.4); /* <-- Corrige cette ligne qui était cassée */
+}
+
+
+
+/* Style pour la partie remplie du slider */
+.setting-row input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: white;
+}
 

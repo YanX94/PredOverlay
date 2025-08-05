@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Timers</title>
+  <link rel="stylesheet" href="timers.css">
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+</head>
+<body>
+  <div id="titlebar">  <img src="assets/images/ico_s.png"/> TIMERS</div>
+
+
+  <div id="timers">
+    <button onclick="startAllTimers()"><i class="fa-solid fa-play"></i> Start Timers</button>
+    <div class="timer" data-name="Red/Blue Buffs" data-duration="250">
+<i class="fa-solid fa-flask-round-potion"></i>
+
+   
+      Red & Blue: <span>--:--</span>
+      <span class="timer-indicator"></span>
+    </div>
+    <div class="timer" data-name="River Buffs" data-duration="120">
+      <i class="fa-solid fa-water"></i>
+      River Buffs: <span class="timer-time">--:--</span>
+      <span class="timer-indicator"></span>
+    </div>
+    <div class="timer" data-name="Gold/Cyan Buffs" data-duration="180">
+      <i class="fa-solid fa-coins"></i>
+
+      Gold Buffs: <span class="timer-time">--:--</span>
+      <span class="timer-indicator"></span>
+    </div>
+    <div class="timer" data-name="Fangtooth" data-duration="300">
+      <i class="fa-solid fa-tooth" style="color:#fff"></i>
+      Fangtooth:  <span class="timer-time">--:--</span>
+      <span class="timer-indicator"></span>
+    </div>
+    <div class="timer" data-name="Orb Prime" data-duration="420">
+      <i class="fa-solid fa-circle-radiation"></i>
+      Orb Prime:  <span class="timer-time">--:--</span>
+      <span class="timer-indicator"></span>
+    </div>
+  </div>
+  <!-- Sons -->
+  <audio id="timer-warning-sound" src="warning.mp3" preload="auto"></audio>
+  <audio id="timer-end-sound" src="end.mp3" preload="auto"></audio>
+  <script src="timers.js"></script>
+</body>
+</html>

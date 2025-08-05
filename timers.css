@@ -1,0 +1,166 @@
+@font-face {
+  font-family: "Storica";
+  src: url("assets/fonts/althawra\ fikra\ Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "WeissenhofGrotesk";
+  src: url("assets/fonts/WeissenhofGrotesk-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: transparent;
+  color: #ffffff;
+  user-select: none;
+  backdrop-filter: blur(10px);
+  height: 100vh;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  overflow: hidden;
+}
+
+/* Titlebar */
+#titlebar {
+  padding: 0px 12px;
+  background: linear-gradient(90deg, #232323 60%, #23232300 100%);
+  font-family: "Storica", sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #fff;
+  border-bottom: 1px solid #232323;
+  cursor: move;
+  -webkit-app-region: drag;
+       border-radius: 18px 18px 0 0;
+}
+
+/* Timers Container */
+#timers {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+
+    border-radius: 0 0 18px 18px;
+  background: rgba(30, 30, 30, 0.92);
+}
+
+/* Individual timer block */
+.timer {
+  display: grid;
+  grid-template-columns: 56px 1fr 80px 32px;
+  align-items: center;
+  gap: 0;
+  background: rgba(30, 30, 30, 0.85);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 10px;
+  transition: background 0.3s ease;
+}
+
+.timer:hover {
+  background: rgba(50, 50, 50, 0.9);
+}
+
+/* Time display */
+.timer span {
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 8px;
+  width: 70px;
+  text-align: center;
+  color: #00ffcc;
+}
+
+/* Start all button */
+#timers > button {
+  background: #00c3a0;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  align-self: center;
+  transition: background 0.3s;
+}
+
+#timers > button:hover {
+  background: #009f85;
+}
+
+/* Timer indicator */
+.timer-indicator {
+  margin-left: 0;
+  width: 22px !important;
+  height: 22px !important;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 2px 8px rgba(16, 158, 16, 0.753);
+  transition: background 0.2s, box-shadow 0.2s, margin-left 0.2s;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.timer-indicator.yellow {
+  background: #facc15;
+  box-shadow: 0 2px 8px rgba(250, 204, 21, 0.5);
+}
+
+.timer-indicator.red {
+  background: #ef4444;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+}
+
+.timer i {
+  margin-right: 6px;
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.timer-icons {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-start;
+  min-width: 40px;
+}
+
+.timer-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  max-width: 80px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #00ffcc;
+  gap: 6px;
+}
+
+.timer-time.ready {
+  color: #a78bfa;
+  font-weight: bold;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  max-width: 80px;
+  gap: 6px;
+}
