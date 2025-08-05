@@ -107,7 +107,7 @@ function showItemModal(targetSlot) {
   // Handle modal close
   document.getElementById("close-item-modal").onclick = () => {
     modal.style.display = "none";
-    document.querySelector('.skill-order').style.display = '';
+    applySkillTableVisibility();
   };
 
   // Handle item selection
@@ -119,7 +119,7 @@ function showItemModal(targetSlot) {
       targetSlot.innerHTML = `<img src="${selectedItem.image}" alt="${selectedItem.name}" style="width: 64px; height: 64px;">`;
       
       modal.style.display = "none";
-      document.querySelector('.skill-order').style.display = '';
+      applySkillTableVisibility();
     });
   });
 }
@@ -282,7 +282,7 @@ async function showHeroModal() {
   // Handle modal close
   document.getElementById("close-hero-modal").onclick = () => {
     heroModal.style.display = "none";
-    document.querySelector('.skill-order').style.display = '';
+    applySkillTableVisibility();
   };
 
   // Handle hero selection
@@ -296,8 +296,8 @@ async function showHeroModal() {
                                 title="${selectedHero.display_name || selectedHero.name}">`;
   
       heroModal.style.display = "none";
-      document.querySelector('.skill-order').style.display = '';
       loadHeroConfig(selectedHero.id);
+      applySkillTableVisibility(); // <-- applique la visibilité après changement de héros
     });
   });
 }
@@ -364,6 +364,7 @@ function loadHeroConfig(heroId) {
   // Update current level counter
   const allLevels = state.flat().filter(level => level !== null);
   currentLevel = allLevels.length > 0 ? Math.max(...allLevels) + 1 : 1;
+  // NE PAS toucher à la visibilité du skill table ici !
 }
 
 /**
@@ -439,10 +440,26 @@ function handleOutsideClick(event) {
       event.target !== heroBtn && 
       event.target !== heroBtn2) {
     heroModal.style.display = "none";
-    document.querySelector('.skill-order').style.display = '';
+    applySkillTableVisibility();
   }
 }
 
+// ==========================================
+// SETTINGS MODAL SYSTEM
+// ==========================================
+
+function applySkillTableVisibility() {
+  const skillTableVisible = JSON.parse(localStorage.getItem("skillTableVisible") ?? "true");
+  document.getElementById("toggle-skill-table").checked = skillTableVisible;
+  document.querySelector(".skill-order").style.display = skillTableVisible ? "" : "none";
+}
+
+function applyOverlayOpacity() {
+  const opacity = parseFloat(localStorage.getItem("overlayOpacity") ?? "1");
+  document.getElementById("overlay-opacity").value = opacity;
+  document.getElementById("opacity-value").textContent = Math.round(opacity * 100) + "%";
+  document.getElementById("overlay-wrapper").style.opacity = opacity;
+}
 // ==========================================
 // INITIALIZATION & EVENT BINDING
 // ==========================================
@@ -471,7 +488,41 @@ function initializeApplication() {
   
   // Bind outside click handler
   document.addEventListener("click", handleOutsideClick);
+
+  // Appliquer la visibilité du skill table au démarrage
+  applySkillTableVisibility();
 }
 
 // Start the application
 initializeApplication();
+
+// ==========================================
+// SETTINGS MODAL LOGIC
+// ==========================================
+document.getElementById("settings-btn").addEventListener("click", () => {
+  document.getElementById("settings-modal").style.display = "block";
+});
+document.getElementById("close-settings-modal").addEventListener("click", () => {
+  document.getElementById("settings-modal").style.display = "none";
+});
+
+// Toggle skill table visibility
+document.getElementById("toggle-skill-table").addEventListener("change", (e) => {
+  const visible = e.target.checked;
+  document.querySelector(".skill-order").style.display = visible ? "" : "none";
+  localStorage.setItem("skillTableVisible", JSON.stringify(visible));
+});
+
+// Overlay opacity control
+document.getElementById("overlay-opacity").addEventListener("input", (e) => {
+  const opacity = parseFloat(e.target.value);
+  document.getElementById("opacity-value").textContent = Math.round(opacity * 100) + "%";
+  document.getElementById("overlay-wrapper").style.opacity = opacity;
+  localStorage.setItem("overlayOpacity", opacity.toString());
+});
+
+// Appliquer le paramètre au démarrage (sécurité si DOMContentLoaded est utilisé ailleurs)
+window.addEventListener("DOMContentLoaded", () => {
+  applySkillTableVisibility();
+  applyOverlayOpacity();
+});

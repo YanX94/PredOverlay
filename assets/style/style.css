@@ -229,6 +229,24 @@ button:hover {
   color: #a72ecc;
 }
 
+#settings-btn {
+  border-radius: 8px;
+  background: #232323;
+  color: #22bceb;
+  border: 1px solid #393939;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0004;
+  width: 36px;
+  height: 36px;
+}
+
+#settings-btn:hover {
+  border-color: #22bceb !important;
+  box-shadow: 0 2px 16px #22bceb;
+  color: #22bceb;
+}
+
 /* ==========================================
    ITEM INVENTORY SYSTEM
    Item slots and hero preview display
@@ -462,3 +480,242 @@ td.locked:hover {
   color: #e2e2e2 !important;
   cursor: default !important;
 }
+
+/* ==========================================
+  Settings Modal Styles
+  Modern settings dialog with enhanced styling
+   ========================================== */
+
+.settings-title {
+  font-family: "Storica", sans-serif;
+  font-size: 20px;
+  color: #22bceb;
+  margin-bottom: 16px;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(34, 188, 235, 0.3);
+}
+
+#settings-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0);
+
+  z-index: 9999; /* <-- Z-index très élevé pour passer au-dessus de tout */
+  overflow: hidden;
+  font-family: "WeissenhofGrotesk", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#close-settings-modal {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 50%;
+  font-size: 24px;
+  height: 44px;
+  width: 44px;
+  background: linear-gradient(135deg, #232323, #343434);
+  border: 2px solid #393939;
+  color: #ff3c3c;
+  cursor: pointer;
+  z-index: 10000;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#close-settings-modal:hover {
+  background: #ff3c3c;
+  color: #fff;
+}
+
+.settings-modal-content {
+  position: relative;
+
+
+
+  background: rgba(32, 34, 36, 1);
+  border-radius: 20px;
+  padding: 0;
+  color: #e2e2e2;
+  box-shadow: 0 8px 32px rgb(0, 0, 0);
+  border: 1px solid #393939;
+  overflow: hidden;
+}
+
+.settings-modal-content h2 {
+  margin: 0;
+  padding: 0px 32px 0px;
+  background: linear-gradient(90deg, #232323 60%, rgba(35, 35, 35, 0) 100%);
+  font-family: "Storica", sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #22bceb;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(34, 188, 235, 0.3);
+}
+
+.settings-content {
+  padding: 24px 32px 32px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: rgba(40, 42, 44, 0.6);
+  height: 30px;
+  border: 1px solid #393939;
+  transition: all 0.3s ease;
+}
+
+.setting-row:hover {
+  background: rgba(50, 52, 54, 0.8);
+  border-color: #22bceb;
+  box-shadow: 0 4px 16px rgba(34, 188, 235, 0.1);
+}
+
+.setting-row:last-child {
+  margin-bottom: 0;
+}
+
+.setting-row label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #e2e2e2;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+    margin-top: -6px;
+}
+
+.setting-row label::before {
+  content: "⚙";
+  font-size: 18px;
+  color: #22bceb;
+  text-shadow: 0 2px 8px rgba(34, 188, 235, 0.4);
+  margin-top:4px;
+}
+
+/* Custom Checkbox Styling */
+.setting-row input[type="checkbox"] {
+  appearance: none;
+  width: 50px;
+  height: 28px;
+  background: #393939;
+  border-radius: 14px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #393939;
+}
+
+.setting-row input[type="checkbox"]:checked {
+  background: linear-gradient(45deg, #2ecc40, #27ae60);
+  border-color: #2ecc40;
+  box-shadow: 0 4px 16px rgba(46, 204, 64, 0.3);
+}
+
+.setting-row input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.setting-row input[type="checkbox"]:checked::after {
+  transform: translateX(22px);
+  background: #fff;
+}
+
+.setting-row input[type="checkbox"]:hover {
+  transform: scale(1.05);
+}
+
+/* Settings Categories */
+.settings-category {
+  margin-bottom: 24px;
+}
+
+.settings-category-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+
+
+
+
+/* Custom Range Slider Styling */
+.setting-row input[type="range"] {
+  width: 300px;
+  height: 6px;
+  border-radius: 3px;
+  background: #393939;
+  outline: none;
+  cursor: pointer;
+}
+
+.setting-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #22bceb, #1e9cc4);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(34, 188, 235, 0.4);
+  transition: all 0.3s ease;
+}
+
+.setting-row input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(34, 188, 235, 0.6);
+}
+
+.setting-row input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #22bceb, #1e9cc4);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(34, 188, 235, 0.4);
+}
+
+#opacity-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: #22bceb;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* Ajustement pour les sliders dans setting-row */
+.setting-row input[type="range"] + #opacity-value {
+  margin-left: 12px;
+}
+
+
